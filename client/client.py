@@ -8,16 +8,16 @@ class OpenAPI:
     The universal OpenAI client, allowing users to interface with the OpenAI API.
     """
 
-    def __init__(self: any, model: str = EMBEDDING_MODEL) -> 'OpenAPI':
+    def __init__(self: any, embedding: str = EMBEDDING_MODEL) -> 'OpenAPI':
         """
         Initializes an OpenAPI instance for interfacing with the OpenAI API.
 
         @return: An OpenAPI instance with fields set as specified.
         """
         dotenv.load_dotenv()
-        self.key: str      = os.getenv('OPENAI_KEY')
-        self.api: 'OpenAI' = OpenAI(api_key=self.key)
-        self.model: str    = model
+        self.key: str       = os.getenv('OPENAI_KEY')
+        self.api: 'OpenAI'  = OpenAI(api_key=self.key)
+        self.embedding_model: str = embedding
 
     def embedding(self: any, text: str) -> np.ndarray:
         """
@@ -26,7 +26,7 @@ class OpenAPI:
         @param text: A string representing the text to embed.
         @return: A vector of floats representing the embedding of the text.
         """
-        result: dict[any] = self.api.embeddings.create(model=self.model, input=text)
+        result: dict[any] = self.api.embeddings.create(model=self.embedding_model, input=text)
         # if (DEBUG): print(f'API Usage: {result.usage}')
         return np.array(result.data[0].embedding)
 
