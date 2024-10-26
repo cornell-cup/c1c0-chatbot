@@ -54,7 +54,6 @@ def speech_to_text():
 def recognize_C1C0(message: str) -> bool:
     names = ["Hey C1C0", "Hey Kiko", "Hey Keko", "Hey Kee Koh", "Hey Chico", "Hey Chica"]
     _, score = fuzzy_match(message, names)
-    print("Fuzz: ", score)
     return score >= FUZZY_THRESHOLD
 
 
