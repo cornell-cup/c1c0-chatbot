@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # Initialzing response handlers and mapping
     mapping: Dict[str, Callable[[str], None]] = {
         # config_desc:      lambda msg: config_handler(client, msg),
-        # general_desc:     lambda msg: general_handler(client, msg),
+        general_desc:     lambda msg: general_handler(client, msg),
         movement_recognize: lambda msg: movement_handler(client, msg),
         facial_recognize:   lambda msg: facial_handler(client, msg)
     }
@@ -32,6 +32,5 @@ if __name__ == '__main__':
 
         # Finding and calling handler for message
         for (recognize, handler) in mapping.items():
-            print(recognize, handler)
             if recognize(client, msg):
                 handler(msg); break
