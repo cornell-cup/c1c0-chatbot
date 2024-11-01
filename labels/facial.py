@@ -9,19 +9,20 @@ from typing import Any # Type Hinting
 
 
 def recognize(api: OpenAPI, message: str) -> bool:
-    desc: str     = 'Facial Recognition: Any task involving C1C0 identifying/learning a person\'s face.'
-    example1: str = 'Hey C1C0, who am I?'
-    example2: str = 'Hey C1C0, remember my face, I am X.'
-    example3: str = 'Hey C1C0, forget my face, I am X.'
+    desc: str     = 'Any task involving facial recognition.'
+    example1: str = 'Who am I?'
+    example2: str = 'Remember my face, I am X.'
+    example3: str = 'Forget my face, I am X.'
 
     matches: list[str] = [desc, example1, example2, example3]
     _, score = api.categorize(message, matches)
+    if (DEBUG): print(f"Facial Recognition: {score}")
     return score > LABEL_THRESHOLD
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> None:
-    subtask1: str = 'Recognize a person\'s face and say their name.'
-    subtask2: str = 'Learn a person\'s face and save their name.'
+    subtask1: str = 'Recognize a person\'s face.'
+    subtask2: str = 'Learn a person\'s face.'
 
     subtasks: list[str] = [subtask1, subtask2]
     label, _ = api.categorize(message, subtasks)

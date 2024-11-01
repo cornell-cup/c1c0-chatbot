@@ -1,5 +1,6 @@
 from client.config import FUZZY_THRESHOLD
 
+import re
 import numpy as np
 import sounddevice as sd
 import speech_recognition as sr
@@ -52,7 +53,7 @@ def speech_to_text():
 
 
 def recognize_C1C0(message: str) -> bool:
-    names = ["Hey C1C0", "Hey Kiko", "Hey Keko", "Hey Kee Koh", "Hey Chico", "Hey Chica"]
+    names = ["Hey C1C0", "Hey Kiko", "Hey Google", "Hey Keko", "Hey Kee Koh", "Hey Chico", "Hey Chica"]
     _, score = fuzzy_match(message, names)
     return score >= FUZZY_THRESHOLD
 
@@ -60,3 +61,8 @@ def recognize_C1C0(message: str) -> bool:
 def fuzzy_match(text, targets):
     scores = [fuzz.partial_ratio(text, target) for target in targets]
     return targets[np.argmax(scores)], np.max(scores)
+
+def remove_C1C0(message: str) -> str:
+    pattern = r"^(Hey\s(?:C1C0|Kiko|Google|Keko|Kee Koh|Chico|Chica))\s*,?\s*"
+    cleaned = re.sub(pattern, "", message, flags=re.IGNORECASE)
+    return cleaned.strip()

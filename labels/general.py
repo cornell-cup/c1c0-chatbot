@@ -6,13 +6,14 @@ from labels.config import handler as config_handler # Configuration Specificatio
 from typing import Any # Type Hinting
 
 def recognize(api: OpenAPI, message: str) -> bool:
-    desc: str     = 'General: Any task related to requesting general knowledge or information.'
-    example1: str = 'Hey C1C0, what is Cornell Cup Robotics?'
-    example2: str = 'Hey C1C0, what it today\'s date?'
-    example3: str = 'Hey C1C0, tell me a joke.'
+    desc: str     = 'Any request for general knowledge or information.'
+    example1: str = 'What is Cornell Cup Robotics?'
+    example2: str = 'What is today\'s date?'
+    example3: str = 'Tell me a joke.'
 
     matches: list[str] = [desc, example1, example2, example3]
     _, score = api.categorize(message, matches)
+    if (DEBUG): print(f"General: {score}")
     return score > LABEL_THRESHOLD
 
 

@@ -8,13 +8,14 @@ from typing import Any  # Type Annotations
 
 
 def recognize(api: OpenAPI, message: str) -> bool:
-    desc: str     = 'Movement: Any command involving moving or rotating the robot\'s body or arms.'
-    example1: str = 'Hey C1C0, move forward X feet.'
-    example2: str = 'Hey C1C0, raise your strong/weak arm X degrees.'
-    example3: str = 'Hey C1C0, rotate your head X degrees.'
+    desc: str     = 'Any command involving moving or rotating.'
+    example1: str = 'Move forward X feet.'
+    example2: str = 'Raise your strong/weak arm X degrees.'
+    example3: str = 'Rotate your head X degrees.'
 
     matches: list[str] = [desc, example1, example2, example3]
     _, score = api.categorize(message, matches)
+    if (DEBUG): print(f"Movement: {score}")
     return score > LABEL_THRESHOLD
 
 

@@ -1,6 +1,5 @@
-from client.audio import speech_to_text, recognize_C1C0  # Audio Interface
+from client.audio import speech_to_text, recognize_C1C0, remove_C1C0  # Audio Interface
 from client.client import OpenAPI # Client Interface
-from client.config import LABEL_THRESHOLD  # Configuration
 
 from labels.config import recognize as config_recognize, handler as config_handler  # Configuration Specifications
 from labels.general import recognize as general_recognize, handler as general_handler  # General Info Specifications
@@ -30,6 +29,10 @@ if __name__ == '__main__':
         if msg is None or not recognize_C1C0(msg):
             print('C1C0 Command Not Recognized.')
             continue
+
+        # Removing C1C0 name from message
+        msg = remove_C1C0(msg)
+        print(f"\033[32mCommand: {msg}\033[0m")
 
         # Finding and calling handler for message
         for (recognize, handler) in mapping.items():
