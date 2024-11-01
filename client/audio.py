@@ -1,11 +1,12 @@
 from client.config import FUZZY_THRESHOLD
 
-import re
+import os, re, random
 import numpy as np
 import sounddevice as sd
 import speech_recognition as sr
 
 from fuzzywuzzy import fuzz
+from playsound import playsound
 
 # Source: https://stackoverflow.com/questions/55984129/attributeerror-could-not-find-pyaudio-check-installation-cant-use-speech-re
 class DuckTypedMicrophone( sr.AudioSource ):
@@ -62,7 +63,13 @@ def fuzzy_match(text, targets):
     scores = [fuzz.partial_ratio(text, target) for target in targets]
     return targets[np.argmax(scores)], np.max(scores)
 
+
 def remove_C1C0(message: str) -> str:
     pattern = r"^(Hey\s(?:C1C0|Kiko|Google|Keko|Kee Koh|Chico|Chica))\s*,?\s*"
     cleaned = re.sub(pattern, "", message, flags=re.IGNORECASE)
     return cleaned.strip()
+
+
+def play_random_sound():
+    sounds = ['assets/r2d2-1.mp3', 'assets/r2d2-2.mp3', 'assets/r2d2-3.mp3', 'assets/r2d2-4.mp3', 'assets/r2d2-5.mp3']
+    playsound(sounds[random.randint(0, 4)])

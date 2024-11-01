@@ -1,9 +1,13 @@
+from api.rotateAPI import * # Rotate Utilities
+
+from client.audio import play_random_sound  # Sound Utilities
 from client.config import *  # Configuration
 from client.client import OpenAPI  # Client Interface
 from client.config import LABEL_THRESHOLD  # Configuration
 
 from labels.config import handler as config_handler  # Configuration Specifications
 
+import time
 from typing import Any  # Type Annotations
 
 
@@ -12,18 +16,19 @@ def recognize(api: OpenAPI, message: str) -> bool:
     example1: str = 'Move forward X feet.'
     example2: str = 'Raise your strong/weak arm X degrees.'
     example3: str = 'Rotate your head X degrees.'
+    example4: str = 'Look left/right/around.'
 
-    matches: list[str] = [desc, example1, example2, example3]
+    matches: list[str] = [desc, example1, example2, example3, example4]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Movement: {score}")
     return score > LABEL_THRESHOLD
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> str:
-    subtask1: str = 'Move the robot\'s body forward/backward/left/right.'
-    subtask2: str = 'Move the robot\'s strong arm up/down/left/right.'
-    subtask3: str = 'Move the robot\'s precise arm up/down/left/right.'
-    subtask4: str = 'Make the robot\'s head rotate left/right/reset.'
+    subtask1: str = 'Move body forward/backward/left/right.'
+    subtask2: str = 'Move strong arm up/down/left/right.'
+    subtask3: str = 'Move precise arm up/down/left/right.'
+    subtask4: str = 'Make head rotate left/right.'
 
     subtasks: list[str] = [subtask1, subtask2, subtask3, subtask4]
     label, _ = api.categorize(message, subtasks)
@@ -52,4 +57,27 @@ def subtask3_handler(api: OpenAPI, message: str, client: Any) -> str:
 
 
 def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('movement_put: rotate')
+    if 'left' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {left_rotate()}')
+        time.sleep(1)
+        client.communicate('put', f'xbox_put: {zero_rotate()}')
+        time.sleep(1)
+        play_random_sound()
+
+    if 'right' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {right_rotate()}')
+        time.sleep(1)
+        client.communicate('put', f'xbox_put: {zero_rotate()}')
+        time.sleep(1)
+        play_random_sound()
+
+    if 'around' in message:
+        client.communicate('put', f'xbox_put: {right_rotate()}')
+        time.sleep(1)
+        client.communicate('put', f'xbox_put: {zero_rotate()}')
+        time.sleep(1)
+        client.communicate('put', f'xbox_put: {left_rotate()}')
+        time.sleep(1)
+        client.communicate('put', f'xbox_put: {zero_rotate()}')
+        time.sleep(1)
+        play_random_sound()

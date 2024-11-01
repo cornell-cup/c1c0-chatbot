@@ -1,6 +1,7 @@
 fuzzywuzzy[speedup]
 numpy
 openai
+playsound
 python-dotenv
 pyzmq
 sounddevice
