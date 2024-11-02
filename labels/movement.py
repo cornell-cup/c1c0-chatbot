@@ -33,10 +33,6 @@ def handler(api: OpenAPI, message: str, client: Any) -> str:
     subtasks: list[str] = [subtask1, subtask2, subtask3, subtask4]
     label, _ = api.categorize(message, subtasks)
 
-    if client is None:
-        print('Movement: ', label)
-        return
-
     if label == subtask1: return subtask1_handler(api, message, client)
     if label == subtask2: return subtask2_handler(api, message, client)
     if label == subtask3: return subtask3_handler(api, message, client)
@@ -57,6 +53,9 @@ def subtask3_handler(api: OpenAPI, message: str, client: Any) -> str:
 
 
 def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
+    if client is None:
+        print('Make head rotate left/right.')
+        return
     delay: float = 2.0
 
     if 'left' in message or 'around' in message:

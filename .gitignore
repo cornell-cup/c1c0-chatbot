@@ -1,5 +1,7 @@
 .DS_Store
 .env
 chatbot_comm.py
+
 venv/
-__pycache__
+__pycache__/
+tests/

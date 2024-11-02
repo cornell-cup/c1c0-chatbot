@@ -8,16 +8,18 @@ class OpenAPI:
     The universal OpenAI client, allowing users to interface with the OpenAI API.
     """
 
-    def __init__(self: any, embedding: str = EMBEDDING_MODEL) -> 'OpenAPI':
+    def __init__(self: any, chat_model: str = CHAT_MODEL, embedding_model: str = EMBEDDING_MODEL) -> 'OpenAPI':
         """
         Initializes an OpenAPI instance for interfacing with the OpenAI API.
 
         @return: An OpenAPI instance with fields set as specified.
         """
         dotenv.load_dotenv()
-        self.key: str       = os.getenv('OPENAI_KEY')
-        self.api: 'OpenAI'  = OpenAI(api_key=self.key)
-        self.embedding_model: str = embedding
+        self.key: str         = os.getenv('OPENAI_KEY')
+        self.api: 'OpenAI'    = OpenAI(api_key=self.key)
+        self.embed_model: str = embedding_model
+        self.chat_model: str  = chat_model
+
 
     def embedding(self: any, text: str) -> np.ndarray:
         """
@@ -26,9 +28,9 @@ class OpenAPI:
         @param text: A string representing the text to embed.
         @return: A vector of floats representing the embedding of the text.
         """
-        result: dict[any] = self.api.embeddings.create(model=self.embedding_model, input=text)
-        # if (DEBUG): print(f'API Usage: {result.usage}')
+        result = self.api.embeddings.create(model=self.embed_model, input=text)
         return np.array(result.data[0].embedding)
+
 
     def similarity(self: any, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """
@@ -42,6 +44,7 @@ class OpenAPI:
         den: float = np.linalg.norm(vec1) * np.linalg.norm(vec2)
         return num / den
 
+
     def categorize(self: any, text: str, labels: list[str]) -> str:
         """
         Returns the label of the given text based on the provided labels.
@@ -53,4 +56,13 @@ class OpenAPI:
         temb: np.ndarray   = self.embedding(text)
         lemb: np.ndarray   = [self.embedding(label) for label in labels]
         scores: np.ndarray = np.array([self.similarity(temb, label) for label in lemb])
+        # print(labels[np.argmax(scores)])
         return labels[np.argmax(scores)], np.max(scores)
+
+
+    def response(self, message: str):
+        result = self.api.chat.completions.create(
+            model=self.chat_model,
+            messages=[{"role": "user", "content": message}]
+        )
+        return result.choices[0].message.content

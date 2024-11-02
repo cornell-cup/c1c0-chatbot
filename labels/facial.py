@@ -27,16 +27,16 @@ def handler(api: OpenAPI, message: str, client: Any) -> None:
     subtasks: list[str] = [subtask1, subtask2]
     label, _ = api.categorize(message, subtasks)
 
-    if client is None:
-        print('Facial Recognition: ', label)
-        return
-
     if label == subtask1: return subtask1_handler(api, message, client)
     if label == subtask2: return subtask2_handler(api, message, client)
     return config_handler(api, message)
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
+    if client is None:
+        print('Facial Recognition: Recognize a person\'s face.')
+        return
+
     _ = client.communicate('put', 'facial_get: attendance')
     response = client.communicate('get', 'facial_put: null')
 
@@ -50,4 +50,8 @@ def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
 
 
 def subtask2_handler(api: OpenAPI, message: str, client: Any) -> None:
+    if client is None:
+        print('Facial Recognition: Learn a person\'s face.')
+        return
+
     print('facial_put: learn')
