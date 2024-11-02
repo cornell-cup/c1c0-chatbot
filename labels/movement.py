@@ -57,27 +57,29 @@ def subtask3_handler(api: OpenAPI, message: str, client: Any) -> str:
 
 
 def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
+    delay: float = 2.0
+
     if 'left' in message or 'around' in message:
         client.communicate('put', f'xbox_put: {left_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         if (not MAC_MODE): play_random_sound()
 
     if 'right' in message or 'around' in message:
         client.communicate('put', f'xbox_put: {right_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         if (not MAC_MODE): play_random_sound()
 
     if 'around' in message:
         client.communicate('put', f'xbox_put: {right_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         client.communicate('put', f'xbox_put: {left_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
-        time.sleep(1)
+        time.sleep(delay)
         if (not MAC_MODE): play_random_sound()
