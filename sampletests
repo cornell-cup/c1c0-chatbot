@@ -1,0 +1,53 @@
+requirements
+- questions must always be short 
+- be more specific on questions that in CIC0's domain (like cornell cup robotics, C1C0, or lab-related tasks)
+- be more general about questions not in its domain (like historical events, humor, weather, etc)
+- C1C0 is not supposed to be an all knowing robot 
+
+example1: Cup Robotics 
+What is Cornell Cup Robotics? it says its an organization when i explicity say 'project team' (not correct) 0.7
+I would like more information on the Software subteam of cornell cup Robotics? 0.6 (generic info)
+Who is the lead of cup robotics? 0.52 (gives me a lead)
+What are some projects that the software subteam of cup robotics work on? (gives me tasks, not projects) 0.44
+name me projects of cornell cup robotics. (gives me what is done in the projects, does not name projects) 0.55
+
+example2: C1C0
+What can you do?
+How can you detect objects?
+How can you recognize faces?
+
+example3: lab-related topics 
+What instrument can I use to look at atoms?
+How can I make ice cream?
+Can you give me an experiment to test gravity?
+
+example4: weather 
+How is the weather in Tokyo?
+What are temperatures like currently?
+I would like to know more about rain forecasts in Ithaca
+
+example5: general events and knowledge 
+Where were the olympics held during the last four years? correctly categorized, correct output (0.234)
+I would like more info on US agenda (0.34, general policies discussed)
+What were the main causes of World War 2? correct answer, detailed (0.403)
+
+example6: humor 
+Can you give me a funny story?
+Tell me a joke?
+Roast me as hard as you can
+
+
+
+
+
+
+
+
+
+
+
+
+
+what happened on july 4th, 1776? maps to correct category, does not meet threshold (0.16)
+What important event happened in September 1, 1939? correct answer, detailed  (0.37)
+What is the great depression? correct answer, detailed (0.36)

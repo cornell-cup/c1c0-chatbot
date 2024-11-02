@@ -1,6 +1,6 @@
 from client.audio import speech_to_text, recognize_C1C0  # Audio Interface
 from client.client import OpenAPI  # Client Interface
-from client.config import LABEL_THRESHOLD  # Configuration
+from client.config import VERY_GENERAL_THRESHOLD, GENERAL_THRESHOLD, SPECIFIC_THRESHOLD  # Configuration
 
 from labels.config import desc as config_desc, handler as config_handler  # Configuration Specifications
 from labels.general import recognize as general_recognize, handler as general_handler  # General Info Specifications
@@ -32,5 +32,6 @@ if __name__ == '__main__':
 
         # Finding and calling handler for message
         for (recognize, handler) in mapping.items():
+            # print(recognize(client, msg))
             if recognize(client, msg):
                 handler(msg); break

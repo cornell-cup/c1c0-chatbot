@@ -8,16 +8,18 @@ class OpenAPI:
     The universal OpenAI client, allowing users to interface with the OpenAI API.
     """
 
-    def __init__(self: any, model: str = EMBEDDING_MODEL) -> 'OpenAPI':
+    def __init__(self: any, chat_model: str = CHAT_MODEL, embedding_model: str = EMBEDDING_MODEL) -> 'OpenAPI':
         """
         Initializes an OpenAPI instance for interfacing with the OpenAI API.
 
         @return: An OpenAPI instance with fields set as specified.
         """
         dotenv.load_dotenv()
-        self.key: str      = os.getenv('OPENAI_KEY')
+        self.key: str      = os.getenv('OPENAI_KEY') 
         self.api: 'OpenAI' = OpenAI(api_key=self.key)
-        self.model: str    = model
+        self.model: str    = embedding_model
+        self.chat_model = chat_model 
+        # self.cmodel: str   = chat_model
 
     def embedding(self: any, text: str) -> np.ndarray:
         """
@@ -53,4 +55,18 @@ class OpenAPI:
         temb: np.ndarray   = self.embedding(text)
         lemb: np.ndarray   = [self.embedding(label) for label in labels]
         scores: np.ndarray = np.array([self.similarity(temb, label) for label in lemb])
+        # print(labels[np.argmax(scores)])
         return labels[np.argmax(scores)], np.max(scores)
+    def response(self, message: str):
+        response = self.api.chat.completions.create(
+            model=self.chat_model, 
+            messages=[
+            {"role": "user", "content": message}
+            ]
+        )
+        # print(response)
+        return response.choices[0].message.content
+
+
+        #what do I need: message, self.api
+
