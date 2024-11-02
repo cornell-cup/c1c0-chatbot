@@ -1,6 +1,6 @@
 from client.config import FUZZY_THRESHOLD
 
-import os, re, random
+import re, random
 import numpy as np
 import sounddevice as sd
 import speech_recognition as sr
@@ -37,13 +37,28 @@ class DuckTypedMicrophone( sr.AudioSource ):
         return self
 
 
-def speech_to_text():
+def speech_to_text() -> str:
     recognizer = sr.Recognizer()
 
     with DuckTypedMicrophone() as source:
         recognizer.adjust_for_ambient_noise(source, duration=1)
         print("\033[94mWaiting for audio...\033[0m")
         audio = recognizer.listen(source)
+
+        try:
+            text = recognizer.recognize_google(audio)
+            return text
+
+        except sr.UnknownValueError or sr.RequestError:
+            return None
+
+
+def file_to_text() -> str:
+    recognizer = sr.Recognizer()
+    filename: str = "commands/" + input("Filename: ")
+
+    with sr.AudioFile(filename) as source:
+        audio = recognizer.record(source)
 
         try:
             text = recognizer.recognize_google(audio)
