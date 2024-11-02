@@ -3,7 +3,7 @@ from api.rotateAPI import * # Rotate Utilities
 from client.audio import play_random_sound  # Sound Utilities
 from client.config import *  # Configuration
 from client.client import OpenAPI  # Client Interface
-from client.config import LABEL_THRESHOLD  # Configuration
+from client.config import LABEL_THRESHOLD, MAC_MODE  # Configuration
 
 from labels.config import handler as config_handler  # Configuration Specifications
 
@@ -62,14 +62,14 @@ def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
         time.sleep(1)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
         time.sleep(1)
-        play_random_sound()
+        if (not MAC_MODE): play_random_sound()
 
     if 'right' in message or 'around' in message:
         client.communicate('put', f'xbox_put: {right_rotate()}')
         time.sleep(1)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
         time.sleep(1)
-        play_random_sound()
+        if (not MAC_MODE): play_random_sound()
 
     if 'around' in message:
         client.communicate('put', f'xbox_put: {right_rotate()}')
@@ -80,4 +80,4 @@ def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
         time.sleep(1)
         client.communicate('put', f'xbox_put: {zero_rotate()}')
         time.sleep(1)
-        play_random_sound()
+        if (not MAC_MODE): play_random_sound()

@@ -54,10 +54,15 @@ def speech_to_text() -> str:
 
 
 def file_to_text() -> str:
-    recognizer = sr.Recognizer()
-    filename: str = "commands/" + input("Filename: ")
+    file: str = input("Filename: ")
+    if (file == "exit" or file == "quit"):
+        print("Ending Chatbot Voice Recognition")
+        exit(0)
 
-    with sr.AudioFile(filename) as source:
+    recognizer = sr.Recognizer()
+    path: str = "commands/" + file
+
+    with sr.AudioFile(path) as source:
         audio = recognizer.record(source)
 
         try:
