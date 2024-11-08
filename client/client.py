@@ -20,6 +20,9 @@ class OpenAPI:
         self.embed_model: str = embedding_model
         self.chat_model: str  = chat_model
 
+        self.embed_tokens: int = 0
+        self.chat_tokens: int  = 0
+
 
     def embedding(self: any, text: str) -> np.ndarray:
         """
@@ -29,6 +32,7 @@ class OpenAPI:
         @return: A vector of floats representing the embedding of the text.
         """
         result = self.api.embeddings.create(model=self.embed_model, input=text)
+        self.embed_tokens += result.usage.total_tokens
         return np.array(result.data[0].embedding)
 
 
@@ -65,4 +69,5 @@ class OpenAPI:
             model=self.chat_model,
             messages=[{"role": "user", "content": message}]
         )
+        self.chat_tokens += result.usage.total_tokens
         return result.choices[0].message.content

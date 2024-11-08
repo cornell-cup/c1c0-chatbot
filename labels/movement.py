@@ -11,7 +11,7 @@ import time
 from typing import Any  # Type Annotations
 
 
-def recognize(api: OpenAPI, message: str) -> bool:
+def recognize(api: OpenAPI, message: str) -> float:
     desc: str     = 'Any command involving moving or rotating.'
     example1: str = 'Move forward X feet.'
     example2: str = 'Raise your strong/weak arm X degrees.'
@@ -21,15 +21,16 @@ def recognize(api: OpenAPI, message: str) -> bool:
     matches: list[str] = [desc, example1, example2, example3, example4]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Movement: {score}")
-    return score > LABEL_THRESHOLD
+    return score
+
+
+subtask1: str = 'Move body forward/backward/left/right.'
+subtask2: str = 'Move strong arm up/down/left/right.'
+subtask3: str = 'Move precise arm up/down/left/right.'
+subtask4: str = 'Make head rotate left/right.'
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> str:
-    subtask1: str = 'Move body forward/backward/left/right.'
-    subtask2: str = 'Move strong arm up/down/left/right.'
-    subtask3: str = 'Move precise arm up/down/left/right.'
-    subtask4: str = 'Make head rotate left/right.'
-
     subtasks: list[str] = [subtask1, subtask2, subtask3, subtask4]
     label, _ = api.categorize(message, subtasks)
 
@@ -41,23 +42,23 @@ def handler(api: OpenAPI, message: str, client: Any) -> str:
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('movement_put: locomotion')
+    print('Attempted ' + subtask1)
 
 
 def subtask2_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('movement_put: strong_arm')
+    print('Attempted ' + subtask2)
 
 
 def subtask3_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('movement_put: precise_arm')
+    print('Attempted ' + subtask3)
 
 
 def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
     if client is None:
-        print('Make head rotate left/right.')
+        print('Attempted ' + subtask4 + ' without client.')
         return
-    delay: float = 2.0
 
+    delay: float = 2.0
     if 'left' in message or 'around' in message:
         client.communicate('put', f'xbox_put: {left_rotate()}')
         time.sleep(delay)
