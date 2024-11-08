@@ -16,7 +16,7 @@ def recognize(api: OpenAPI, message: str) -> bool:
 
     matches: list[str] = [desc, example1, example2, example3]
     _, score = api.categorize(message, matches)
-    if (DEBUG): print(f"Facial Recognition: {score}")
+    # if (DEBUG): print(f"Facial Recognition: {score}")
     return score > LABEL_THRESHOLD
 
 

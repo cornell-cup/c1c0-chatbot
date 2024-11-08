@@ -10,7 +10,7 @@ def recognize(api: OpenAPI, message: str) -> bool:
 
     matches: list[str] = [desc, example1]
     _, score = api.categorize(message, matches)
-    if (DEBUG): print(f"Configuration: {score}")
+    # if (DEBUG): print(f"Configuration: {score}")
     return score > LABEL_THRESHOLD
 
 

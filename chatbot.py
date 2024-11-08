@@ -9,6 +9,9 @@ from labels.facial import recognize as facial_recognize, handler as facial_handl
 
 from typing import Callable, Dict # Type Hinting
 
+
+
+#inputs audio responses from the user, creates mappings to handlers, maps the input to the correct handler
 if __name__ == '__main__':
     # Initializing OpenAI client
     chatbot_client: OpenAPI = OpenAPI()

@@ -60,9 +60,12 @@ class OpenAPI:
         return labels[np.argmax(scores)], np.max(scores)
 
 
-    def response(self, message: str):
+    def response(self, message: str, context: str = None):
         result = self.api.chat.completions.create(
             model=self.chat_model,
-            messages=[{"role": "user", "content": message}]
+            messages=[
+                {"role": "system", "content": context},
+                {"role": "user", "content": message}
+            ]
         )
         return result.choices[0].message.content

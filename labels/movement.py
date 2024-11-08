@@ -20,7 +20,7 @@ def recognize(api: OpenAPI, message: str) -> bool:
 
     matches: list[str] = [desc, example1, example2, example3, example4]
     _, score = api.categorize(message, matches)
-    if (DEBUG): print(f"Movement: {score}")
+    # if (DEBUG): print(f"Movement: {score}")
     return score > LABEL_THRESHOLD
 
 
