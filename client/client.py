@@ -24,16 +24,16 @@ class OpenAPI:
         self.chat_tokens: int  = 0
 
 
-    def embedding(self: any, text: str) -> np.ndarray:
+    def embedding(self: any, texts: list[str]) -> np.ndarray:
         """
         Returns the vector embedding of the given text.
 
         @param text: A string representing the text to embed.
         @return: A vector of floats representing the embedding of the text.
         """
-        result = self.api.embeddings.create(model=self.embed_model, input=text)
+        result = self.api.embeddings.create(model=self.embed_model, input=texts)
         self.embed_tokens += result.usage.total_tokens
-        return np.array(result.data[0].embedding)
+        return np.array([item.embedding for item in result.data])
 
 
     def similarity(self: any, vec1: np.ndarray, vec2: np.ndarray) -> float:
@@ -57,10 +57,9 @@ class OpenAPI:
         @param labels: A list of strings representing the possible labels.
         @return: A string representing the best label of the text.
         """
-        temb: np.ndarray   = self.embedding(text)
-        lemb: np.ndarray   = [self.embedding(label) for label in labels]
-        scores: np.ndarray = np.array([self.similarity(temb, label) for label in lemb])
-        # print(labels[np.argmax(scores)])
+        embeddings = self.embedding([text] + labels)
+        temb, lemb = embeddings[0], embeddings[1:]
+        scores = np.array([self.similarity(temb, label) for label in lemb])
         return labels[np.argmax(scores)], np.max(scores)
 
 

@@ -25,6 +25,6 @@ def handler(api: OpenAPI, message: str, client: Any) -> None:
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
     print("Ending Chatbot Voice Recognition")
-    print("Embedding Token Usage: " + str(api.embed_tokens))
-    print("Chat Token Usage: " + str(api.chat_tokens))
+    print(f"Embedding Token Usage: {api.embed_tokens}")
+    print(f"Chat Token Usage: {api.chat_tokens}")
     exit(0)

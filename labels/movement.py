@@ -25,9 +25,9 @@ def recognize(api: OpenAPI, message: str) -> float:
 
 
 subtask1: str = 'Move body forward/backward/left/right.'
-subtask2: str = 'Move strong arm up/down/left/right.'
-subtask3: str = 'Move precise arm up/down/left/right.'
-subtask4: str = 'Make head rotate left/right.'
+subtask2: str = 'Move strong arm up/down/left/right to grab object.'
+subtask3: str = 'Move precise arm up/down/left/right to grab object.'
+subtask4: str = 'Make head rotate left/right to look around.'
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> str:
@@ -42,20 +42,20 @@ def handler(api: OpenAPI, message: str, client: Any) -> str:
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('Attempted ' + subtask1)
+    print(f'Attempted {subtask1}')
 
 
 def subtask2_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('Attempted ' + subtask2)
+    print(f'Attempted {subtask2}')
 
 
 def subtask3_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print('Attempted ' + subtask3)
+    print(f'Attempted {subtask3}')
 
 
 def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
     if client is None:
-        print('Attempted ' + subtask4 + ' without client.')
+        print(f'Attempted "{subtask4}" without client.')
         return
 
     delay: float = 2.0
