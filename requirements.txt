@@ -5,4 +5,5 @@ playsound
 python-dotenv
 pyzmq
 sounddevice
+spacy
 speechrecognition

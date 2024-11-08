@@ -7,6 +7,7 @@ from labels.general import recognize as general_recognize, handler as general_ha
 from labels.movement import recognize as movement_recognize, handler as movement_handler  # Movement Specifications
 from labels.facial import recognize as facial_recognize, handler as facial_handler  # Facial Specifications
 
+import numpy as np
 from typing import Callable, Dict # Type Hinting
 
 
@@ -19,10 +20,10 @@ if __name__ == '__main__':
 
     # Initialzing response handlers and mapping
     mapping: Dict[str, Callable[[str], None]] = {
-        config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client),
-        general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client),
+        facial_recognize:   lambda msg: facial_handler(chatbot_client, msg, scheduler_client),
         movement_recognize: lambda msg: movement_handler(chatbot_client, msg, scheduler_client),
-        facial_recognize:   lambda msg: facial_handler(chatbot_client, msg, scheduler_client)
+        general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client),
+        config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client),
     }
 
     # Infinite loop for chatbot
@@ -39,6 +40,6 @@ if __name__ == '__main__':
 
         # Finding and calling handler for message
         print(f"\033[32mCommand: {msg}\033[0m")
-        for (recognize, handler) in mapping.items():
-            if recognize(chatbot_client, msg):
-                handler(msg); break
+        index = np.argmax([recognize(chatbot_client, msg) for recognize in mapping.keys()])
+        handler = list(mapping.values())[index]
+        handler(msg)
