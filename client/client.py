@@ -63,13 +63,18 @@ class OpenAPI:
         return labels[np.argmax(scores)], np.max(scores)
 
 
-    def response(self, message: str, context: str = None):
-        result = self.api.chat.completions.create(
-            model=self.chat_model,
-            messages=[
-                {"role": "system", "content": context},
-                {"role": "user", "content": message}
-            ]
-        )
-        self.chat_tokens += result.usage.total_tokens
-        return result.choices[0].message.content
+    def response(self, message: str, context: str = None, max_tokens: int = 70):
+        try:
+            result = self.api.chat.completions.create(
+                model=self.chat_model,
+                messages=[
+                    {"role": "system", "content": context},
+                    {"role": "user", "content": message}
+                ],
+                max_tokens=max_tokens
+            )
+            self.chat_tokens += result.usage.total_tokens
+            return result.choices[0].message.content
+        except Exception as e:
+            print(f"API Error with response: {str(e)}")
+            return None
