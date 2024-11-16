@@ -62,10 +62,13 @@ class OpenAPI:
         temb, lemb = embeddings[0], embeddings[1:]
         scores = np.array([self.similarity(temb, label) for label in lemb])
         return labels[np.argmax(scores)], np.max(scores)
-    
+
 
     def response(self, message: str, context: str = None, max_tokens: int = 150):
-        context = [context, CORRECTION_PROMPT]
+        correction_prompt: str = """You are not allowed to refer directly to any part of the user's message. You 
+                          are not allowed to correct the user either. If you are confused, ask the user to 
+                          clarify or repeat their message."""
+        context = [context, correction_prompt]
         try:
             result = self.api.chat.completions.create(
                 model=self.chat_model,
