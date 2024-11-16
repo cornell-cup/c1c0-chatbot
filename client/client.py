@@ -1,5 +1,6 @@
 import os, dotenv, numpy as np # Standard Python Imports
 from openai import OpenAI
+from client.config import CORRECTION_PROMPT, CONCISE_PROMPT
 
 from client.config import * # # Configurations
 
@@ -63,15 +64,18 @@ class OpenAPI:
         return labels[np.argmax(scores)], np.max(scores)
 
 
-    def response(self, message: str, context: str = None, max_tokens: int = 70):
+    def response(self, message: str, context: str = None, max_tokens: int = 150):
+        context = [context, CORRECTION_PROMPT]
         try:
             result = self.api.chat.completions.create(
                 model=self.chat_model,
                 messages=[
-                    {"role": "system", "content": context},
+                    {"role": "system", "content": " ".join(context)},
                     {"role": "user", "content": message}
                 ],
-                max_tokens=max_tokens
+                max_tokens=max_tokens, 
+                stop = [".", "!", "?"] #ensure response cuts off at a complete sentence 
+
             )
             self.chat_tokens += result.usage.total_tokens
             return result.choices[0].message.content

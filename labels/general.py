@@ -61,7 +61,7 @@ def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
     supported by numerous robotics and technology companies.
     """
     print("1: This is related to CORNELL CUP ROBOTICS")
-    print(api.response(message, context))
+    # print(api.response(message, context))
     return api.response(message, context)
 
 #handles requests and questions related to lab
@@ -70,7 +70,7 @@ def subtask2_handler(api: OpenAPI, message: str, client: Any) -> str:
     about measurements, laboratory instruments, experiments, chemical recipes, and experimental design."""
     
     print("2: This is related to LAB")
-    print(api.response(message, context))   
+    # print(api.response(message, context))   
     return api.response(message, context)
 
 #handles requests and questions related to C1C0
@@ -91,12 +91,12 @@ def subtask3_handler(api: OpenAPI, message: str, client: Any) -> None:
     print(message)
 
     print("3: This is related to C1C0")
-    print(api.response(message, context))
+    # print(api.response(message, context))
 
     return api.response(message, context)
 
 def gentask_handler(api: OpenAPI, message: str, client: Any) -> None:
     context = """"You are answering a question or request."""
     print("4: This is related to GENERAL TASKS")
-    print(api.response(message, context))
+    # print(api.response(message, context))
     return api.response(message, context)
