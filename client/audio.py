@@ -82,6 +82,13 @@ def text_to_speech(text: str) -> None:
         return None
 
 
+def play_sound(sound_file):
+    try:
+        playsound(sound_file)
+    except Exception as e:
+        print(f"Error playing sound: {e}")
+        
+
 def file_to_text() -> str:
     file: str = input("Filename: ")
     if (file == "exit" or file == "quit"):

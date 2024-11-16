@@ -62,7 +62,7 @@ class OpenAPI:
         temb, lemb = embeddings[0], embeddings[1:]
         scores = np.array([self.similarity(temb, label) for label in lemb])
         return labels[np.argmax(scores)], np.max(scores)
-
+    
 
     def response(self, message: str, context: str = None, max_tokens: int = 150):
         context = [context, CORRECTION_PROMPT]
