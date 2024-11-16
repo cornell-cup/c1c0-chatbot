@@ -6,8 +6,7 @@ from labels.config import recognize as config_recognize, handler as config_handl
 from labels.general import recognize as general_recognize, handler as general_handler  # General Info Specifications
 from labels.movement import recognize as movement_recognize, handler as movement_handler  # Movement Specifications
 from labels.facial import recognize as facial_recognize, handler as facial_handler  # Facial Specifications
-from client.audio import text_to_speech, play_sound, play_random_sound
-
+from client.audio import text_to_speech, play_random_sound
 
 import numpy as np
 from typing import Callable, Dict # Type Hinting
@@ -60,6 +59,7 @@ if __name__ == '__main__':
 
         # if best_handler==general_handler:
         play_random_sound()
+        
         text_to_speech(best_handler(msg))
         play_random_sound()
 

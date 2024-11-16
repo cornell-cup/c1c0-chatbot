@@ -1,6 +1,5 @@
 import os, dotenv, numpy as np # Standard Python Imports
 from openai import OpenAI
-from client.config import CORRECTION_PROMPT, CONCISE_PROMPT
 
 from client.config import * # # Configurations
 

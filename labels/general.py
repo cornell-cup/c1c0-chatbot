@@ -27,7 +27,7 @@ def recognize(api: OpenAPI, message: str) -> bool:
 def handler(api: OpenAPI, message: str, client: Any) -> None:
     subtask1: str = 'Answer a Cornell Cup Robotics question.'
     subtask2: str = 'Answer a lab-related or experiment question.'
-    subtask3: str = 'Answer a question or request about Kiko or Chico.'
+    subtask3: str = 'Answer a question or request about Kiko, Chico, or you'
     gentask: str = 'Answer a question or request'
 
 
