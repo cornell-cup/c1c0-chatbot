@@ -63,7 +63,7 @@ class OpenAPI:
         return labels[np.argmax(scores)], np.max(scores)
 
 
-    def response(self, message: str, context: str = None, max_tokens: int = 150):
+    def response(self, message: str, context: str = "", max_tokens: int = 200):
         correction_prompt: str = """You are not allowed to refer directly to any part of the user's message. You 
                           are not allowed to correct the user either. If you are confused, ask the user to 
                           clarify or repeat their message."""
@@ -84,3 +84,5 @@ class OpenAPI:
         except Exception as e:
             print(f"API Error with response: {str(e)}")
             return None
+        
+
