@@ -3,6 +3,7 @@ numpy
 openai
 playsound
 python-dotenv
+pyttsx3
 pyzmq
 sounddevice
 spacy

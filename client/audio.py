@@ -54,31 +54,25 @@ def speech_to_text() -> str:
         except sr.UnknownValueError or sr.RequestError:
             return None
 
+
 def text_to_speech(text: str) -> None:
-    """
-    Converts text to speech and plays it
-    Args:
-        text (str): The text to be converted to speech
-    Returns:
-        None
-    """
     try:
         engine = pyttsx3.init()
-        
+
         # Optional: Customize voice properties
         engine.setProperty('rate', 150)    # Speed of speech
         engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
-        
+
         # Get available voices and set to a English voice
         voices = engine.getProperty('voices')
         engine.setProperty('voice', voices[0].id)  # Index 0 is usually English
-        
+
         # Convert and play
         engine.say(text)
         engine.runAndWait()
-        
+
     except Exception as e:
-        print(f"Error in text-to-speech: {str(e)}")
+        print(f"Error in TTS: {str(e)}")
         return None
 
 
@@ -87,7 +81,7 @@ def play_sound(sound_file):
         playsound(sound_file)
     except Exception as e:
         print(f"Error playing sound: {e}")
-        
+
 
 def file_to_text() -> str:
     file: str = input("Filename: ")

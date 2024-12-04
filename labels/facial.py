@@ -56,8 +56,8 @@ def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
         return
 
     names: list[str] = get_facial_names(api, client)
-    if len(names) == 0: print("I don't recognize anyone.")
-    else: print(f"I recognize {names[0]}.")
+    if len(names) == 0: return "I don't recognize anyone."
+    else: return f"I recognize {names[0]}."
 
 
 def subtask2_handler(api: OpenAPI, message: str, client: Any) -> None:
@@ -79,8 +79,8 @@ def subtask2_handler(api: OpenAPI, message: str, client: Any) -> None:
     names = names + get_facial_names(api, client)
 
     names = list(set(names))
-    if len(names) == 0: print("I don't recognize anyone.")
-    else: print(f"I recognize {', '.join(names)}.")
+    if len(names) == 0: return "I don't recognize anyone."
+    else: return f"I recognize {', '.join(names)}."
 
 
 def extract_name(message: str) -> str:
