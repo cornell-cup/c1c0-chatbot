@@ -1,4 +1,6 @@
-from api.rotateAPI import * # Rotate Utilities
+from api.locomotionAPI import * # Locomotion Utilities
+from api.rotateAPI import * # Head Rotation Utilities
+from api.strongAPI import * # Strong Arm Utilities
 
 from client.audio import play_random_sound  # Sound Utilities
 from client.config import *  # Configuration
@@ -25,8 +27,8 @@ def recognize(api: OpenAPI, message: str) -> float:
 
 
 subtask1: str = 'Move body forward/backward/left/right.'
-subtask2: str = 'Move strong arm up/down/left/right to grab object.'
-subtask3: str = 'Move precise arm up/down/left/right to grab object.'
+subtask2: str = 'Move strong arm up/down to grab object.'
+subtask3: str = 'Move precise arm up/down to grab object.'
 subtask4: str = 'Make head rotate left/right to look around.'
 
 
@@ -42,11 +44,77 @@ def handler(api: OpenAPI, message: str, client: Any) -> str:
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print(f'Attempted {subtask1}')
+    if client is None:
+        print(f'Attempted "{subtask1}" without client.')
+        return
+
+    delay: float = 1.0
+    if 'forward' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {get_locomotion(0, 1)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {zero_locomotion()}')
+        if (not MAC_MODE): play_random_sound()
+
+    if 'right' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {get_locomotion(1, 0)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {zero_locomotion()}')
+        if (not MAC_MODE): play_random_sound()
+
+    if 'backward' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {get_locomotion(0, -1)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {zero_locomotion()}')
+        if (not MAC_MODE): play_random_sound()
+
+    if 'left' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {get_locomotion(-1, 0)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {zero_locomotion()}')
+        if (not MAC_MODE): play_random_sound()
 
 
 def subtask2_handler(api: OpenAPI, message: str, client: Any) -> str:
-    print(f'Attempted {subtask2}')
+    if client is None:
+        print(f'Attempted "{subtask2}" without client.')
+        return
+
+    delay: float = 1.0
+    if 'up' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {move_shoulder(1)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_shoulder(0)}')
+
+        client.communicate('put', f'xbox_put: {move_elbow(2)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_elbow(0)}')
+
+        client.communicate('put', f'xbox_put: {move_hand(2)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_hand(0)}')
+
+        client.communicate('put', f'xbox_put: {move_spin(1)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_spin(0)}')
+        if (not MAC_MODE): play_random_sound()
+
+    if 'down' in message or 'around' in message:
+        client.communicate('put', f'xbox_put: {move_shoulder(2)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_shoulder(0)}')
+
+        client.communicate('put', f'xbox_put: {move_elbow(1)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_elbow(0)}')
+
+        client.communicate('put', f'xbox_put: {move_hand(1)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_hand(0)}')
+
+        client.communicate('put', f'xbox_put: {move_spin(2)}')
+        time.sleep(delay)
+        client.communicate('put', f'xbox_put: {move_spin(0)}')
+        if (not MAC_MODE): play_random_sound()
 
 
 def subtask3_handler(api: OpenAPI, message: str, client: Any) -> str:

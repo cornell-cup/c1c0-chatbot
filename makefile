@@ -6,7 +6,7 @@ run:
 
 install:
 	venv/bin/pip install -r requirements.txt
-	python -m spacy download en_core_web_sm
+	venv/bin/python -m spacy download en_core_web_sm
 
 venv:
 	python$(PYTHON_VER) -m venv venv/
