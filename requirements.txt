@@ -6,5 +6,5 @@ python-dotenv
 pyttsx3
 pyzmq
 sounddevice
-spacy
+spacy<3.0.0
 speechrecognition

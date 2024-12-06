@@ -48,7 +48,7 @@ def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
         print(f'Attempted "{subtask1}" without client.')
         return
 
-    delay: float = 1.0
+    delay: float = 2.0
     if 'forward' in message or 'around' in message:
         client.communicate('put', f'xbox_put: {get_locomotion(0, 1)}')
         time.sleep(delay)

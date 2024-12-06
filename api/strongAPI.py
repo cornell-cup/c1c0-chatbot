@@ -1,5 +1,3 @@
-from scheduler.config import * # Configurations
-
 from typing import List # Typing
 
 # data[elbow, spin, hand, shoulder]

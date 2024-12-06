@@ -26,7 +26,7 @@ class OpenAPI:
         self.chat_tokens: int  = 0
 
 
-    def embedding(self: any, texts: list[str]) -> np.ndarray:
+    def embedding(self: any, texts: List[str]) -> np.ndarray:
         """
         Returns the vector embedding of the given text.
 
