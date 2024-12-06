@@ -10,27 +10,33 @@ class OpenAPI:
     The universal OpenAI client, allowing users to interface with the OpenAI API.
     """
 
-    def __init__(self: any, embedding: str = EMBEDDING_MODEL) -> 'OpenAPI':
+    def __init__(self: any, chat_model: str = CHAT_MODEL, embedding_model: str = EMBEDDING_MODEL) -> 'OpenAPI':
         """
         Initializes an OpenAPI instance for interfacing with the OpenAI API.
 
         @return: An OpenAPI instance with fields set as specified.
         """
         dotenv.load_dotenv()
-        self.key: str       = os.getenv('OPENAI_KEY')
-        self.api: 'OpenAI'  = OpenAI(api_key=self.key)
-        self.embedding_model: str = embedding
+        self.key: str         = os.getenv('OPENAI_KEY')
+        self.api: 'OpenAI'    = OpenAI(api_key=self.key)
+        self.embed_model: str = embedding_model
+        self.chat_model: str  = chat_model
 
-    def embedding(self: any, text: str) -> np.ndarray:
+        self.embed_tokens: int = 0
+        self.chat_tokens: int  = 0
+
+
+    def embedding(self: any, texts: list[str]) -> np.ndarray:
         """
         Returns the vector embedding of the given text.
 
         @param text: A string representing the text to embed.
         @return: A vector of floats representing the embedding of the text.
         """
-        result: dict[any] = self.api.embeddings.create(model=self.embedding_model, input=text)
-        # if (DEBUG): print(f'API Usage: {result.usage}')
-        return np.array(result.data[0].embedding)
+        result = self.api.embeddings.create(model=self.embed_model, input=texts)
+        self.embed_tokens += result.usage.total_tokens
+        return np.array([item.embedding for item in result.data])
+
 
     def similarity(self: any, vec1: np.ndarray, vec2: np.ndarray) -> float:
         """
@@ -52,7 +58,30 @@ class OpenAPI:
         @param labels: A list of strings representing the possible labels.
         @return: A string representing the best label of the text.
         """
-        temb: np.ndarray   = self.embedding(text)
-        lemb: np.ndarray   = [self.embedding(label) for label in labels]
-        scores: np.ndarray = np.array([self.similarity(temb, label) for label in lemb])
+        embeddings = self.embedding([text] + labels)
+        temb, lemb = embeddings[0], embeddings[1:]
+        scores = np.array([self.similarity(temb, label) for label in lemb])
         return labels[np.argmax(scores)], np.max(scores)
+
+
+    def response(self, message: str, context: str = None, max_tokens: int = 150):
+        correction_prompt: str = """You are not allowed to refer directly to any part of the user's message. You
+                          are not allowed to correct the user either. If you are confused, ask the user to
+                          clarify or repeat their message."""
+        context = [context, correction_prompt]
+        try:
+            result = self.api.chat.completions.create(
+                model=self.chat_model,
+                messages=[
+                    {"role": "system", "content": " ".join(context)},
+                    {"role": "user", "content": message}
+                ],
+                max_tokens=max_tokens,
+                stop = [".", "!", "?"] #ensure response cuts off at a complete sentence
+
+            )
+            self.chat_tokens += result.usage.total_tokens
+            return result.choices[0].message.content
+        except Exception as e:
+            print(f"API Error with response: {str(e)}")
+            return None
