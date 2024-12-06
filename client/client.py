@@ -3,6 +3,8 @@ from openai import OpenAI
 
 from client.config import * # # Configurations
 
+from typing import List
+
 class OpenAPI:
     """
     The universal OpenAI client, allowing users to interface with the OpenAI API.
@@ -42,7 +44,7 @@ class OpenAPI:
         den: float = np.linalg.norm(vec1) * np.linalg.norm(vec2)
         return num / den
 
-    def categorize(self: any, text: str, labels: list[str]) -> str:
+    def categorize(self: any, text: str, labels: List[str]) -> str:
         """
         Returns the label of the given text based on the provided labels.
 
