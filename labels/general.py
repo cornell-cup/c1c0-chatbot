@@ -2,14 +2,11 @@ from client.config import * # Configuration
 from client.client import OpenAPI # Client Interface
 
 from labels.config import handler as config_handler # Configuration Specifications
-from labels.config import IDKhandler
 from client.audio import text_to_speech
 
 from typing import Any # Type Hinting
 
 
-#recognizes if message is a request or question, examples are just certain instances that belong to subtasks
-#example1 belongs to subtask2, example2 belongs to subtask1, etc 
 def recognize(api: OpenAPI, message: str) -> bool:
     desc: str     = 'Anything.'
     example1: str = 'Where is France?'
@@ -23,15 +20,19 @@ def recognize(api: OpenAPI, message: str) -> bool:
     if (DEBUG): print(f"General: {score}")
     return score
 
+
+subtask1: str = 'Return a greeting/welcome.'
+
 def handler(api: OpenAPI, message: str, client: Any) -> None:
-    # context = """"You are answering a question or request."""
-    if (DEBUG): print("4: This is related to GENERAL TASKS")  
-    _, helloscore = api.categorize(message, ['Hello', "Hi", "What's going", "What's good", "What's up"])   
-    print(helloscore) 
-    if helloscore>=0.7:
-        text_to_speech("Hello, I am C1C0. How can I assist you today?")  
-        return 
-    # print(api.response(message, context))
-    context = """You are C1C0, a helpful and polite lab assistant."""
+    subtasks: list[str] = [subtask1]
+    label, _ = api.categorize(message, subtasks)
+
+    if label == subtask1: return subtask1_handler(api, message, client)
+    context: str = "You are C1C0, a helpful and polite lab assisstant."
+    return api.response(message, context=context)
+
+
+def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
+    context = "Return a greeting introducing yourself, and offering assistance."
     return api.response(message, context=context)
 

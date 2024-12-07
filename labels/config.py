@@ -15,8 +15,6 @@ def recognize(api: OpenAPI, message: str) -> float:
     return score
 
 
-
-#turn off handler 
 def handler(api: OpenAPI, message: str, client: Any) -> None:
     subtask1: str = 'Turn off voice recognition feature.'
 
@@ -24,11 +22,6 @@ def handler(api: OpenAPI, message: str, client: Any) -> None:
     label, _ = api.categorize(message, subtasks)
 
     if label == subtask1: return subtask1_handler(api, message, client)
-
-#IDK handler
-def IDKhandler(api: OpenAPI, message: str, client: Any) -> None:
-    print("I did not understand the message. Please repeat it again or elaborate.")
-    text_to_speech("I did not understand the message. Please repeat it again or elaborate.")
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
