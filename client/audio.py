@@ -71,7 +71,8 @@ def text_to_speech(text: str) -> None:
         
         # Get available voices and set to a English voice
         voices = engine.getProperty('voices')
-        engine.setProperty('voice', voices[0].id)  # Index 0 is usually English
+        
+        # engine.setProperty('voice', voices[1].id)  # Index 0 is usually English
         
         # Convert and play
         engine.say(text)

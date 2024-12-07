@@ -12,7 +12,7 @@ from client.audio import text_to_speech, play_random_sound, play_sound
 
 import numpy as np
 from typing import Callable, Dict # Type Hinting
-
+import collections
 
 
 #inputs audio responses from the user, creates mappings to handlers, maps the input to the correct handler
@@ -26,25 +26,23 @@ if __name__ == '__main__':
         facial_recognize:   lambda msg: facial_handler(chatbot_client, msg, scheduler_client),
         movement_recognize: lambda msg: movement_handler(chatbot_client, msg, scheduler_client),
         question_recognize:  lambda msg: question_handler(chatbot_client, msg, scheduler_client),
-        config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client),
-        general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client)
+        config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client)
+        # general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client)
     }
 
     #Initialize threshold for each task 
     thresholds: Dict[str, int] = {
         facial_recognize: 0.5,
         movement_recognize: 0.4,
-        question_recognize: 0.2,
-        config_recognize: 0.8,
-        general_recognize: 0.1
+        question_recognize: 0.3,
+        config_recognize: 0.8
     }
+    
     
     # Infinite loop for chatbot
     while True:
         # Receiving audio from user or file
         msg: str = file_to_text() if FILE_MODE else speech_to_text()
-
-
         print(f"\033[32mUser: {msg}\033[0m")
 
         # Checking and removing C1C0 name from message
@@ -61,18 +59,40 @@ if __name__ == '__main__':
                 msg[i] = 'C1C0'
         msg = " ".join(msg)
 
+        #storing message to previous messages to store context, deletes if exceeds 10 
+        if msg:
+            chatbot_client.context.append(msg)
+            if len(chatbot_client.context)>5:
+                chatbot_client.context.popleft()
+        print(chatbot_client.context)
+
         # Finding and calling handler for message
         print(f"\033[32mCommand: {msg}\033[0m")
         best_handler, best_score = None, 0
 
+        #make copy of context
+        #while copy of context still has context and no best handler is assigned
+        # prevcopy = prevtexts[:]
+        # while prevcopy and not best_handler:
         for recognize, handler in mapping.items():
             score = recognize(chatbot_client, msg)
-            if (score-thresholds[recognize])>best_score: #this ensures only best score is chosen and nothing that does not meet threshold is chosen
+            #this ensures only best score is chosen and nothing that does not meet threshold is chosen
+            if (score-thresholds[recognize])>best_score: 
                 best_handler, best_score = handler, score   
-
+            # cont = prevcopy.pop()
+            
         play_random_sound()
         if best_handler:
-            text_to_speech(best_handler(msg))
-            play_random_sound()
+            text_to_speech(best_handler(msg))    
+
+        #goes to the general handler if there are no other matches    
+        else:    
+            # print(chatbot_client.response("Summarize context in at most three words", chatbot_client.context))
+            text_to_speech(general_handler(chatbot_client, msg, scheduler_client))
+        play_random_sound()
+
+
+
+            
 
 

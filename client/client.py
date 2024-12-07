@@ -1,6 +1,6 @@
 import os, dotenv, numpy as np # Standard Python Imports
 from openai import OpenAI
-
+import collections
 from client.config import * # # Configurations
 
 class OpenAPI:
@@ -8,7 +8,7 @@ class OpenAPI:
     The universal OpenAI client, allowing users to interface with the OpenAI API.
     """
 
-    def __init__(self: any, chat_model: str = CHAT_MODEL, embedding_model: str = EMBEDDING_MODEL) -> 'OpenAPI':
+    def __init__(self: any, chat_model: str = CHAT_MODEL, embedding_model: str = EMBEDDING_MODEL, context: collections.deque = collections.deque()) -> 'OpenAPI':
         """
         Initializes an OpenAPI instance for interfacing with the OpenAI API.
 
@@ -19,7 +19,7 @@ class OpenAPI:
         self.api: 'OpenAI'    = OpenAI(api_key=self.key)
         self.embed_model: str = embedding_model
         self.chat_model: str  = chat_model
-
+        self.context = context
         self.embed_tokens: int = 0
         self.chat_tokens: int  = 0
 
@@ -63,11 +63,17 @@ class OpenAPI:
         return labels[np.argmax(scores)], np.max(scores)
 
 
-    def response(self, message: str, context: str = "", max_tokens: int = 200):
+    def response(self, message: str, context: str = "", max_tokens: int = 200, correction: bool = True):
         correction_prompt: str = """You are not allowed to refer directly to any part of the user's message. You 
                           are not allowed to correct the user either. If you are confused, ask the user to 
                           clarify or repeat their message."""
-        context = [context, correction_prompt]
+        C1C0_prompt: str = """When referring to C1C0, always address in first person because C1C0 is you."""
+        # prevcontext = str(self.context)
+        # context = ["Use the following list of previously asked questions for context:", prevcontext]
+        context = [context, C1C0_prompt]
+        if correction:
+            context.append(correction_prompt)
+        if (DEBUG): print(" ".join(context))
         try:
             result = self.api.chat.completions.create(
                 model=self.chat_model,

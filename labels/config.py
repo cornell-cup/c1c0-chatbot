@@ -1,14 +1,15 @@
 from client.config import * # Configuration
 from client.client import OpenAPI # Client Interface
-
+from client.audio import text_to_speech
 from typing import Any # Type Hinting
 
 
 def recognize(api: OpenAPI, message: str) -> float:
     desc: str = 'Any task related to settings or error handling.'
     example1: str = 'Turn off voice recognition.'
+    example2: str = 'Power off'
 
-    matches: list[str] = [desc, example1]
+    matches: list[str] = [desc, example1, example2]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Configuration: {score}")
     return score
@@ -26,7 +27,8 @@ def handler(api: OpenAPI, message: str, client: Any) -> None:
 
 #IDK handler
 def IDKhandler(api: OpenAPI, message: str, client: Any) -> None:
-    print("I did not understand the message. Please repeat it again.")
+    print("I did not understand the message. Please repeat it again or elaborate.")
+    text_to_speech("I did not understand the message. Please repeat it again or elaborate.")
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
