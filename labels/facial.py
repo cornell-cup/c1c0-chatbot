@@ -6,7 +6,7 @@ from client.client import OpenAPI # Client Interface
 from labels.config import handler as config_handler # Configuration Specifications
 
 import ast, time, spacy
-from typing import Any # Type Hinting
+from typing import Any, List # Type Hinting
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -17,7 +17,7 @@ def recognize(api: OpenAPI, message: str) -> float:
     example2: str = "Who am I? What's my name?"
     example2: str = 'Learn my face/name, I am X.'
 
-    matches: list[str] = [desc, example1, example2]
+    matches: List[str] = [desc, example1, example2]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Facial Recognition: {score}")
     return score
@@ -29,7 +29,7 @@ subtask3: str = 'Learn/remember a face, person, or name.'
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> None:
-    subtasks: list[str] = [subtask1, subtask2, subtask3]
+    subtasks: List[str] = [subtask1, subtask2, subtask3]
     label, _ = api.categorize(message, subtasks)
 
     if label == subtask1: return subtask1_handler(api, message, client)
@@ -38,7 +38,7 @@ def handler(api: OpenAPI, message: str, client: Any) -> None:
     return config_handler(api, message)
 
 
-def get_facial_names(api: OpenAPI, client: Any) -> list[str]:
+def get_facial_names(api: OpenAPI, client: Any) -> List[str]:
     _ = client.communicate('put', 'facial_get: attendance')
     response = client.communicate('get', 'facial_put: null')
 
@@ -55,7 +55,7 @@ def subtask1_handler(api: OpenAPI, message: str, client: Any) -> None:
         print(f'Attempted "{subtask1}" without a client.')
         return
 
-    names: list[str] = get_facial_names(api, client)
+    names: List[str] = get_facial_names(api, client)
     if len(names) == 0: return "I don't recognize anyone."
     else: return f"I recognize {names[0]}."
 

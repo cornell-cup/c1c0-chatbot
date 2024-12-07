@@ -1,5 +1,5 @@
 CHATBOT_PATH := $(shell pwd)
-PYTHON_VER   := 3.11
+PYTHON_VER   := 3.7
 
 run:
 	venv/bin/python chatbot.py

@@ -3,6 +3,8 @@ from openai import OpenAI
 
 from client.config import * # # Configurations
 
+from typing import List
+
 class OpenAPI:
     """
     The universal OpenAI client, allowing users to interface with the OpenAI API.
@@ -24,7 +26,7 @@ class OpenAPI:
         self.chat_tokens: int  = 0
 
 
-    def embedding(self: any, texts: list[str]) -> np.ndarray:
+    def embedding(self: any, texts: List[str]) -> np.ndarray:
         """
         Returns the vector embedding of the given text.
 
@@ -48,8 +50,7 @@ class OpenAPI:
         den: float = np.linalg.norm(vec1) * np.linalg.norm(vec2)
         return num / den
 
-
-    def categorize(self: any, text: str, labels: list[str]) -> str:
+    def categorize(self: any, text: str, labels: List[str]) -> str:
         """
         Returns the label of the given text based on the provided labels.
 
@@ -64,8 +65,8 @@ class OpenAPI:
 
 
     def response(self, message: str, context: str = None, max_tokens: int = 150):
-        correction_prompt: str = """You are not allowed to refer directly to any part of the user's message. You 
-                          are not allowed to correct the user either. If you are confused, ask the user to 
+        correction_prompt: str = """You are not allowed to refer directly to any part of the user's message. You
+                          are not allowed to correct the user either. If you are confused, ask the user to
                           clarify or repeat their message."""
         context = [context, correction_prompt]
         try:
@@ -75,8 +76,8 @@ class OpenAPI:
                     {"role": "system", "content": " ".join(context)},
                     {"role": "user", "content": message}
                 ],
-                max_tokens=max_tokens, 
-                stop = [".", "!", "?"] #ensure response cuts off at a complete sentence 
+                max_tokens=max_tokens,
+                stop = [".", "!", "?"] #ensure response cuts off at a complete sentence
 
             )
             self.chat_tokens += result.usage.total_tokens

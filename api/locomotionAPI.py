@@ -1,5 +1,3 @@
-from scheduler.config import * # Configurations
-
 def zero_locomotion() -> str:
     """
     Creates message with zero movement to send to scheduler.
