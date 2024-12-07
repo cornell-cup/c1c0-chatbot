@@ -1,6 +1,6 @@
 from client.audio import *  # Audio Interface
 from client.client import OpenAPI # Client Interface
-from client.config import FILE_MODE # Configuration
+from client.config import FILE_MODE, MAC_MODE # Configuration
 
 from labels.config import recognize as config_recognize, handler as config_handler  # Configuration Specifications
 from labels.facial import recognize as facial_recognize, handler as facial_handler  # Facial Specifications
@@ -32,9 +32,9 @@ if __name__ == '__main__':
     thresholds: Dict[str, int] = {
         config_recognize: 0.8,
         facial_recognize: 0.5,
+        general_recognize: 0.3,
         movement_recognize: 0.4,
         question_recognize: 0.3,
-        general_recognize: 0.3,
     }
 
     # Infinite loop for chatbot
@@ -56,14 +56,16 @@ if __name__ == '__main__':
 
         for recognize, handler in mapping.items():
             score = recognize(chatbot_client, msg)
-            if score-thresholds[recognize] > best_score:
-                best_handler, best_score = handler, score
+            if score - thresholds[recognize] > best_score:
+                best_handler, best_score = handler, score - thresholds[recognize]
+        print("Best Handler: ", best_handler.__name__ if best_handler else "None")
 
-        play_random_sound()
-        if best_handler: text_to_speech(best_handler(msg))
-        else: text_to_speech("I did not understand the message. Please repeat it again or elaborate.")
-        play_random_sound()
-        text = best_handler(msg)
+        if (not MAC_MODE): play_random_sound()
+        text = best_handler(msg) if best_handler \
+            else "I did not understand the message. Please repeat it again or elaborate."
+        if (text is not None): text_to_speech(text)
+        if (not MAC_MODE): play_random_sound()
+
 
         # Storing previous messages
         chatbot_client.previous.append(msg)

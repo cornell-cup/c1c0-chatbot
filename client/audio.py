@@ -55,15 +55,13 @@ def speech_to_text() -> str:
             return None
 
 
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)    # Speed of speech
+engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
+
+
 def text_to_speech(text: str) -> None:
     try:
-        engine = pyttsx3.init()
-
-        # Optional: Customize voice properties
-        engine.setProperty('rate', 150)    # Speed of speech
-        engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
-
-        # Convert and play
         engine.say(text)
         engine.runAndWait()
 

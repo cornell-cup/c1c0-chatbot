@@ -19,8 +19,9 @@ def recognize(api: OpenAPI, message: str) -> float:
     example2: str = 'Raise your strong/weak arm X degrees.'
     example3: str = 'Rotate your head X degrees.'
     example4: str = 'Look left/right/around.'
+    example5: str = 'Wave your hand to say hello.'
 
-    matches: list[str] = [desc, example1, example2, example3, example4]
+    matches: list[str] = [desc, example1, example2, example3, example4, example5]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Movement: {score}")
     return score
@@ -30,16 +31,18 @@ subtask1: str = 'Move body forward/backward/left/right.'
 subtask2: str = 'Move strong arm up/down to grab object.'
 subtask3: str = 'Move precise arm up/down to grab object.'
 subtask4: str = 'Make head rotate left/right to look around.'
+subtask5: str = 'Wave hand to say hello in a friendly manner.'
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> str:
-    subtasks: list[str] = [subtask1, subtask2, subtask3, subtask4]
+    subtasks: list[str] = [subtask1, subtask2, subtask3, subtask4, subtask5]
     label, _ = api.categorize(message, subtasks)
 
     if label == subtask1: return subtask1_handler(api, message, client)
     if label == subtask2: return subtask2_handler(api, message, client)
     if label == subtask3: return subtask3_handler(api, message, client)
     if label == subtask4: return subtask4_handler(api, message, client)
+    if label == subtask5: return subtask5_handler(api, message, client)
     return config_handler(api, message)
 
 
@@ -148,3 +151,23 @@ def subtask4_handler(api: OpenAPI, message: str, client: Any) -> str:
         client.communicate('put', f'xbox_put: {left_rotate()}'); time.sleep(delay)
         client.communicate('put', f'xbox_put: {zero_rotate()}'); time.sleep(delay)
         if (not MAC_MODE): play_random_sound()
+
+
+def subtask5_handler(api: OpenAPI, message: str, client: Any) -> str:
+    if client is None:
+        print(f'Attempted "{subtask5}" without client.')
+        return
+
+    delay: float = 1.0
+    client.communicate('put', f'xbox_put: {move_shoulder(1)}'); time.sleep(delay)
+    client.communicate('put', f'xbox_put: {move_shoulder(0)}')
+    client.communicate('put', f'xbox_put: {move_elbow(2)}');    time.sleep(delay)
+    client.communicate('put', f'xbox_put: {move_elbow(0)}')
+
+    client.communicate('put', f'xbox_put: {move_hand(2)}');     time.sleep(delay)
+    client.communicate('put', f'xbox_put: {move_hand(0)}')
+    client.communicate('put', f'xbox_put: {move_spin(1)}');     time.sleep(2*delay)
+    client.communicate('put', f'xbox_put: {move_spin(0)}')
+    client.communicate('put', f'xbox_put: {move_spin(2)}');     time.sleep(2*delay)
+    client.communicate('put', f'xbox_put: {move_spin(0)}')
+    return "Hello, everyone!"
