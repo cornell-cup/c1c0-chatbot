@@ -1,0 +1,12 @@
+# facial score for questions
+
+# correct facial recognition tasks
+# can you recognize me? 0.519 - incorrect, categorizes to general when it should be facial 
+# do you know my name? 0.507 - correct
+# do you recognize anyone? 0.627 - correct
+# can you identify anyone? 0.59 - correct
+
+# incorrect facial recognition tasks (should be question)
+# what is your name? 0.3849 - correct 
+# how do you look like? 0.255 - gives correct answer (categorizes to general however)
+

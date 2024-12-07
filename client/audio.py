@@ -69,16 +69,12 @@ def text_to_speech(text: str) -> None:
         engine.setProperty('rate', 150)    # Speed of speech
         engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
         
-        # Get available voices and set to a English voice
-        voices = engine.getProperty('voices')
-        engine.setProperty('voice', voices[0].id)  # Index 0 is usually English
-        
         # Convert and play
         engine.say(text)
         engine.runAndWait()
         
     except Exception as e:
-        print(f"Error in text-to-speech: {str(e)}")
+        print(f"Error in TTS: {str(e)}")
         return None
 
 
@@ -87,7 +83,7 @@ def play_sound(sound_file):
         playsound(sound_file)
     except Exception as e:
         print(f"Error playing sound: {e}")
-        
+
 
 def file_to_text() -> str:
     file: str = input("Filename: ")
@@ -110,7 +106,7 @@ def file_to_text() -> str:
 
 
 def recognize_C1C0(message: str) -> bool:
-    names = ["Hey C1C0", "Hey Kiko", "Hey Google", "Hey Keko", "Hey Kee Koh", "Hey Chico", "Hey Chica"]
+    names = ["Hey C1C0", "Hey Kiko", "Hey Google", "Hey Keko", "Hey Kee Koh", "Hey Chico", "Hey Chica", "Hey Kika"]
     _, score = fuzzy_match(message, names)
     return score >= FUZZY_THRESHOLD
 
@@ -127,5 +123,13 @@ def remove_C1C0(message: str) -> str:
 
 
 def play_random_sound():
-    sounds = ['assets/r2d2-1.mp3', 'assets/r2d2-2.mp3', 'assets/r2d2-3.mp3', 'assets/r2d2-4.mp3', 'assets/r2d2-5.mp3']
-    playsound(sounds[random.randint(0, 4)])
+    sounds = ['assets/r2d2-1.mp3', 'assets/r2d2-2.mp3', 'assets/r2d2-3.mp3', 'assets/r2d2-4.mp3']
+    playsound(sounds[random.randint(0, 3)])
+
+
+def convert_C1C0(message: str) -> str:
+    names = ["Kiko", "Chico", "Keeko", "Kika", "kiko", "chico", "keeko", "kika"]
+    split = message.split()
+    for i in range(len(split)):
+        if (split[i] in names): split[i] = 'C1C0'
+    return " ".join(split)
