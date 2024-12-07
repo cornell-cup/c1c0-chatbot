@@ -23,18 +23,16 @@ if __name__ == '__main__':
     mapping: Dict[str, Callable[[str], None]] = {
         config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client),
         facial_recognize:   lambda msg: facial_handler(chatbot_client, msg, scheduler_client),
-        general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client),
         movement_recognize: lambda msg: movement_handler(chatbot_client, msg, scheduler_client),
         question_recognize: lambda msg: question_handler(chatbot_client, msg, scheduler_client),
     }
 
     # Initialize threshold for each task
     thresholds: Dict[str, int] = {
-        config_recognize: 0.8,
+        config_recognize: 0.6,
         facial_recognize: 0.5,
         movement_recognize: 0.4,
         question_recognize: 0.3,
-        general_recognize: 0.3,
     }
 
     # Infinite loop for chatbot
@@ -60,12 +58,11 @@ if __name__ == '__main__':
                 best_handler, best_score = handler, score
 
         play_random_sound()
-        if best_handler: text_to_speech(best_handler(msg))
-        else: text_to_speech("I did not understand the message. Please repeat it again or elaborate.")
+        text = best_handler(msg) if best_handler else general_handler(chatbot_client, msg, scheduler_client)
+        if (text): text_to_speech(text)
         play_random_sound()
-        text = best_handler(msg)
 
         # Storing previous messages
         chatbot_client.previous.append(msg)
-        if len(chatbot_client.previous) > 5:
-            chatbot_client.previous.remove(0)
+        # if len(chatbot_client.previous) > 5:
+        #     chatbot_client.previous.remove(0)

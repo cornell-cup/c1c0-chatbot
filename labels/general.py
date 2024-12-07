@@ -22,16 +22,30 @@ def recognize(api: OpenAPI, message: str) -> bool:
 
 
 subtask1: str = 'Return a greeting/welcome.'
+subtask2: str = 'How are you doing.'
 
 def handler(api: OpenAPI, message: str, client: Any) -> None:
-    subtasks: list[str] = [subtask1]
-    label, _ = api.categorize(message, subtasks)
+    subtasks: list[str] = [subtask1, subtask2]
+    label, score = api.categorize(message, subtasks)
+    # print(label, score)
 
-    if label == subtask1: return subtask1_handler(api, message, client)
+
+    if label == subtask1 and score>SPECIFIC_THRESHOLD: 
+        # print("hello")
+        return subtask1_handler(api, message, client)
+
+    if label == subtask2 and score>SPECIFIC_THRESHOLD: 
+        # print("hello")
+        return subtask2_handler(api, message, client) 
     context: str = "You are C1C0, a helpful and polite lab assisstant."
     return api.response(message, context=context)
 
 
 def subtask1_handler(api: OpenAPI, message: str, client: Any) -> str:
     context = "Return a greeting introducing yourself, and offering assistance."
+    return api.response(message, context=context)
+
+def subtask2_handler(api: OpenAPI, message: str, client: Any) -> str:
+    context = """Return a greeting introducing yourself, how you are feeling, 
+                and offering assistance."""
     return api.response(message, context=context)
