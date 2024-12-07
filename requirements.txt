@@ -1,7 +1,7 @@
 fuzzywuzzy[speedup]
 numpy
 openai
-playsound
+playsound==1.2.2
 python-dotenv
 pyttsx3
 pyzmq
