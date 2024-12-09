@@ -70,8 +70,11 @@ class OpenAPI:
 
 
     def response(self, message: str, context: str = "", max_tokens: int = 500):
-        correction_prompt: str = "You are not allowed to correct the user. If you are confused, ask the user to clarify or repeat their message."
-        pov_prompt: str = "When referring to C1C0, always address in first person because C1C0 is you."
+        correction_prompt: str = """You are not allowed to correct the user on 
+                                    their message. If you are confused, ask the 
+                                    user to clarify or repeat their message."""
+        pov_prompt: str = """When you refer to C1C0, always address in first 
+                            person because C1C0 is you."""
         total_context = [correction_prompt, pov_prompt] + self.previous + [context]
 
         try:

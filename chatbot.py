@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # Initialize threshold for each task
     thresholds: Dict[str, int] = {
-        config_recognize: 0.8,
+        config_recognize: 0.6,
         facial_recognize: 0.5,
         general_recognize: 0.3,
         movement_recognize: 0.4,
@@ -69,5 +69,5 @@ if __name__ == '__main__':
 
         # Storing previous messages
         chatbot_client.previous.append(msg)
-        if len(chatbot_client.previous) > 5:
-            chatbot_client.previous.remove(0)
+        # if len(chatbot_client.previous) > 5:
+        #     chatbot_client.previous.remove(0)

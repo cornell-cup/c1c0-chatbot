@@ -68,7 +68,7 @@ def subtask2_handler(api: OpenAPI, message: str, client: Any) -> None:
     delay: float = 2.0
     client.communicate('put', f'xbox_put: {left_rotate()}'); time.sleep(delay)
     client.communicate('put', f'xbox_put: {zero_rotate()}')
-    names = names + get_facial_names(api, client)
+    names = get_facial_names(api, client)
 
     client.communicate('put', f'xbox_put: {right_rotate()}'); time.sleep(2*delay)
     client.communicate('put', f'xbox_put: {zero_rotate()}')

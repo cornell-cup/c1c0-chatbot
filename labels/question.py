@@ -10,8 +10,9 @@ def recognize(api: OpenAPI, message: str) -> bool:
     example2: str = 'Questions about C1C0 or you'
     example3: str = 'What are you, what can you do?'
     example4: str = 'What features does C1C0 have?'
+    example5: str = "What does your lidar/depth camera/microphone do?"
 
-    matches: list[str] = [desc, example1, example2, example3, example4]
+    matches: list[str] = [desc, example1, example2, example3, example4, example5]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Question: {score}")
     return score
@@ -20,7 +21,7 @@ def recognize(api: OpenAPI, message: str) -> bool:
 def handler(api: OpenAPI, message: str, client: Any) -> None:
     subtask1: str = ['Cornell Cup Robotics question', 'Cornell Cup Robotics projects', 'Cup Robotics', 'Minibot', 'BOB', 'Bidirectional Operational Bot']
     subtask2: str = ['Lab-related', 'Experiment', 'Laboratory instruments', 'Experimental design', 'Measurements']
-    subtask3: str = ['C1C0', 'You', 'Features', 'Looks', 'What C1C0 does', 'What you do']
+    subtask3: str = ['C1C0', 'You', 'Features', 'Looks', 'What C1C0 does', 'What you do', 'C1C0 features', 'Your features']
 
     _, score1 = api.categorize(message, subtask1)
     _, score2 = api.categorize(message, subtask2)
@@ -57,9 +58,9 @@ def subtask3_handler(api: OpenAPI, message: str, client: Any) -> None:
     so refer in first person. Anything about you is also related to C1C0. C1C0
     is an R2D2 project focused upon creating a semi-autonomous lab assistant that
     could navigate its surrounding environment, interact with its surroundings,
-    and greet people! We have advertised C1C0 in events to promote enthusiasm for
-    robotics. The features you have are a LIDAR sensor for navigation, an Intel
+    and greet people! The features you have are a LIDAR sensor for navigation, an Intel
     Realsense depth camera for vision, and a microphone for audio input/output.
-    List your features when someone asks.
+    List your features when someone asks. We have advertised C1C0 in events to
+    promote enthusiasm for robotics.
     """
     return api.response(message, context)
