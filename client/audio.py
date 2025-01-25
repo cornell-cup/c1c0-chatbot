@@ -61,3 +61,9 @@ def recognize_C1C0(message: str) -> bool:
 def fuzzy_match(text, targets):
     scores = [fuzz.partial_ratio(text, target) for target in targets]
     return targets[np.argmax(scores)], np.max(scores)
+
+
+
+
+
+

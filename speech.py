@@ -22,7 +22,7 @@ class DuckTypedMicrophone( sr.AudioSource ):
         self.recorder.Stop()
         self.recorder = None
 
-    def read(self, nSamples):
+    def read(self, nSamples): 
         sampleArray        = self.recorder.ReadSamples(self.nSamplesRead, nSamples)
         self.nSamplesRead += nSamples
         return self.recorder.sound.dat2str(sampleArray)
