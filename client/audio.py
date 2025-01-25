@@ -14,6 +14,7 @@ class DuckTypedMicrophone( sr.AudioSource ):
         self.channels   = channels
 
     def __enter__(self):
+        
         self._stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, device=self.device)
         self._stream.start()
 
