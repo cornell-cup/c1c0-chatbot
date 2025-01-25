@@ -3,4 +3,3 @@
 chatbot_comm.py
 venv/
 __pycache__
-.env.local
