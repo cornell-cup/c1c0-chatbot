@@ -15,9 +15,9 @@ def recognize(api: OpenAPI, message: str) -> float:
     desc: str     = 'Any task involving facial recognition.'
     example1: str = 'Who do you recognize around you?'
     example2: str = "Who am I? What's my name?"
-    example2: str = 'Learn my face/name, I am X.'
+    example3: str = 'Learn my face/name, I am X.'
 
-    matches: List[str] = [desc, example1, example2]
+    matches: List[str] = [desc, example1, example2, example3]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Facial Recognition: {score}")
     return score
