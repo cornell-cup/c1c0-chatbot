@@ -8,9 +8,6 @@ from labels.general import recognize as general_recognize, handler as general_ha
 from labels.movement import recognize as movement_recognize, handler as movement_handler  # Movement Specifications
 from labels.question import recognize as question_recognize, handler as question_handler  # Question Specifications
 
-
-from client.audio import text_to_speech, play_random_sound, play_sound
-
 from typing import Callable, Dict # Type Hinting
 
 
@@ -70,4 +67,4 @@ if __name__ == '__main__':
         text = best_handler(msg) if best_handler \
             else "I did not understand the message. Please repeat it again or elaborate."
         if (text is not None): text_to_speech(text)
-        if (not MAC_MODE): play_random_sound()
+        # if (not MAC_MODE): play_random_sound()

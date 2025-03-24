@@ -82,7 +82,10 @@ def file_to_text() -> str:
     if (file == "exit" or file == "quit"):
         print("Ending Chatbot Voice Recognition")
         exit(0)
+    return file_to_text2(file)
 
+
+def file_to_text2(file) -> str:
     if (".wav" not in file): file += ".wav"
     recognizer = sr.Recognizer()
     path: str = "commands/" + file
