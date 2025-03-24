@@ -19,13 +19,19 @@ if __name__ == '__main__':
     chatbot_client: OpenAPI = OpenAPI()
     scheduler_client = None
 
-    # Initialzing response handlers and mapping
+    # Initializing response handlers and mapping
+    def config_lambda(msg: str): return config_handler(chatbot_client, msg, scheduler_client)
+    def facial_lambda(msg: str): return facial_handler(chatbot_client, msg, scheduler_client)
+    def general_lambda(msg: str): return general_handler(chatbot_client, msg, scheduler_client)
+    def movement_lambda(msg: str): return movement_handler(chatbot_client, msg, scheduler_client)
+    def question_lambda(msg: str): return question_handler(chatbot_client, msg, scheduler_client)
+
     mapping: Dict[str, Callable[[str], None]] = {
-        config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client),
-        facial_recognize:   lambda msg: facial_handler(chatbot_client, msg, scheduler_client),
-        general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client),
-        movement_recognize: lambda msg: movement_handler(chatbot_client, msg, scheduler_client),
-        question_recognize: lambda msg: question_handler(chatbot_client, msg, scheduler_client),
+        config_recognize:   config_lambda,
+        facial_recognize:   facial_lambda,
+        general_recognize:  general_lambda,
+        movement_recognize: movement_lambda,
+        question_recognize: question_lambda,
     }
 
     # Initialize threshold for each task
@@ -41,7 +47,7 @@ if __name__ == '__main__':
     while True:
         # Receiving audio from user or file
         msg: str = file_to_text() if FILE_MODE else speech_to_text()
-	    print(f"\033[32mUser: {msg}\033[0m")
+        print(f"\033[32mUser: {msg}\033[0m")
 
         # Checking and converting STT message
         if msg is None or not recognize_C1C0(msg):
@@ -58,7 +64,7 @@ if __name__ == '__main__':
             score = recognize(chatbot_client, msg)
             if score - thresholds[recognize] > best_score:
                 best_handler, best_score = handler, score - thresholds[recognize]
-        print("Best Handler: ", best_handler.__name__ if best_handler else "None")
+        print("Best Handler: ", best_handler if best_handler else "None")
 
         if (not MAC_MODE): play_random_sound()
         text = best_handler(msg) if best_handler \
