@@ -65,14 +65,17 @@ def subtask2_handler(api: OpenAPI, message: str, client: Any) -> None:
         print(f'Attempted "{subtask2}" without a client.')
         return
 
-    delay: float = 2.0
+    delay: float = 1.0
     client.communicate('put', f'xbox_put: {left_rotate()}'); time.sleep(delay)
-    client.communicate('put', f'xbox_put: {zero_rotate()}')
-    names = get_facial_names(api, client)
+    client.communicate('put', f'xbox_put: {zero_rotate()}'); time.sleep(3*delay)
 
+    names = get_facial_names(api, client)
     client.communicate('put', f'xbox_put: {right_rotate()}'); time.sleep(2*delay)
-    client.communicate('put', f'xbox_put: {zero_rotate()}')
+    client.communicate('put', f'xbox_put: {zero_rotate()}'); time.sleep(3*delay)
+
     names = names + get_facial_names(api, client)
+    client.communicate('put', f'xbox_put: {left_rotate()}'); time.sleep(delay)
+    client.communicate('put', f'xbox_put: {zero_rotate()}'); time.sleep(3*delay)
 
     names = list(set(names))
     if len(names) == 0: return "I don't recognize anyone."

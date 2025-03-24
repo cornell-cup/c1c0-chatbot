@@ -41,7 +41,7 @@ if __name__ == '__main__':
     while True:
         # Receiving audio from user or file
         msg: str = file_to_text() if FILE_MODE else speech_to_text()
-        print(f"\033[32mUser: {msg}\033[0m")
+	    print(f"\033[32mUser: {msg}\033[0m")
 
         # Checking and converting STT message
         if msg is None or not recognize_C1C0(msg):
@@ -65,9 +65,3 @@ if __name__ == '__main__':
             else "I did not understand the message. Please repeat it again or elaborate."
         if (text is not None): text_to_speech(text)
         if (not MAC_MODE): play_random_sound()
-
-
-        # Storing previous messages
-        chatbot_client.previous.append(msg)
-        # if len(chatbot_client.previous) > 5:
-        #     chatbot_client.previous.remove(0)

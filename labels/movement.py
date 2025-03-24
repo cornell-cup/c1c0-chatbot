@@ -158,16 +158,14 @@ def subtask5_handler(api: OpenAPI, message: str, client: Any) -> str:
         print(f'Attempted "{subtask5}" without client.')
         return
 
-    delay: float = 1.0
-    client.communicate('put', f'xbox_put: {move_shoulder(1)}'); time.sleep(delay)
+    delay: float = 4.0
+    client.communicate('put', f'xbox_put: {move_shoulder(2)}'); time.sleep(delay)
     client.communicate('put', f'xbox_put: {move_shoulder(0)}')
     client.communicate('put', f'xbox_put: {move_elbow(2)}');    time.sleep(delay)
     client.communicate('put', f'xbox_put: {move_elbow(0)}')
 
-    client.communicate('put', f'xbox_put: {move_hand(2)}');     time.sleep(delay)
+    client.communicate('put', f'xbox_put: {move_hand(2)}');     time.sleep(delay-1)
     client.communicate('put', f'xbox_put: {move_hand(0)}')
-    client.communicate('put', f'xbox_put: {move_spin(1)}');     time.sleep(2*delay)
-    client.communicate('put', f'xbox_put: {move_spin(0)}')
-    client.communicate('put', f'xbox_put: {move_spin(2)}');     time.sleep(2*delay)
-    client.communicate('put', f'xbox_put: {move_spin(0)}')
+    client.communicate('put', f'xbox_put: {move_hand(1)}');     time.sleep(delay-1)
+    client.communicate('put', f'xbox_put: {move_hand(0)}')
     return "Hello, everyone!"
