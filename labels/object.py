@@ -19,7 +19,7 @@ def recognize(api: OpenAPI, message: str) -> float:
     return score
 
 
-subtask1: str = 'Recognize the singular item in front of you.'
+subtask1: str = 'What is the most prominent object in front of you?'
 subtask2: str = 'How many items are directly in front of you.'
 subtask3: str = 'Look around and recognize every object.'
 
@@ -76,4 +76,4 @@ def subtask3_handler(api: OpenAPI, message : str, client: Any) -> None:
         time.sleep(1)
         response = client.communicate('get', 'object_put: null')
     
-    print("Objects counted")
+    print("All objects detected")
