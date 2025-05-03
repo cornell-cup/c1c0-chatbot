@@ -57,7 +57,7 @@ def speech_to_text() -> str:
 
 engine = pyttsx3.init()
 engine.setProperty('rate', 150)    # Speed of speech
-engine.setProperty('volume', 0.9)  # Volume (0.0 to 1.0)
+engine.setProperty('volume', 0.5)  # Volume (0.0 to 1.0)
 
 
 def text_to_speech(text: str) -> None:
@@ -82,7 +82,11 @@ def file_to_text() -> str:
     if (file == "exit" or file == "quit"):
         print("Ending Chatbot Voice Recognition")
         exit(0)
+    return file_to_text2(file)
 
+
+def file_to_text2(file) -> str:
+    if (".wav" not in file): file += ".wav"
     recognizer = sr.Recognizer()
     path: str = "commands/" + file
 
