@@ -4,6 +4,7 @@ from client.config import FILE_MODE, MAC_MODE # Configuration
 
 from labels.config import recognize as config_recognize, handler as config_handler  # Configuration Specifications
 from labels.facial import recognize as facial_recognize, handler as facial_handler  # Facial Specifications
+from labels.object import recognize as object_recognize, handler as object_handler # Object Specifications
 from labels.general import recognize as general_recognize, handler as general_handler # General Specifications
 from labels.movement import recognize as movement_recognize, handler as movement_handler  # Movement Specifications
 from labels.question import recognize as question_recognize, handler as question_handler  # Question Specifications
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     mapping: Dict[str, Callable[[str], None]] = {
         config_recognize:   lambda msg: config_handler(chatbot_client, msg, scheduler_client),
         facial_recognize:   lambda msg: facial_handler(chatbot_client, msg, scheduler_client),
+        object_recognize:   lambda msg: object_handler(chatbot_client, msg, scheduler_client),
         general_recognize:  lambda msg: general_handler(chatbot_client, msg, scheduler_client),
         movement_recognize: lambda msg: movement_handler(chatbot_client, msg, scheduler_client),
         question_recognize: lambda msg: question_handler(chatbot_client, msg, scheduler_client),
@@ -32,6 +34,7 @@ if __name__ == '__main__':
     thresholds: Dict[str, int] = {
         config_recognize: 0.6,
         facial_recognize: 0.5,
+        object_recognize: 0.5,
         general_recognize: 0.3,
         movement_recognize: 0.4,
         question_recognize: 0.3,
@@ -66,8 +69,7 @@ if __name__ == '__main__':
         if (text is not None): text_to_speech(text)
         if (not MAC_MODE): play_random_sound()
 
-
         # Storing previous messages
         chatbot_client.previous.append(msg)
-        # if len(chatbot_client.previous) > 5:
-        #     chatbot_client.previous.remove(0)
+        if len(chatbot_client.previous) > 5:
+            chatbot_client.previous.remove(0)

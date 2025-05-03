@@ -1,10 +1,10 @@
 fuzzywuzzy[speedup]
 numpy
 openai
-playsound==1.2.2
+playsound
 python-dotenv
 pyttsx3
 pyzmq
 sounddevice
-spacy<3.0.0
+spacy
 speechrecognition

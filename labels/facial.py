@@ -15,9 +15,10 @@ def recognize(api: OpenAPI, message: str) -> float:
     desc: str     = 'Any task involving facial recognition.'
     example1: str = 'Who do you recognize around you?'
     example2: str = "Who am I? What's my name?"
-    example2: str = 'Learn my face/name, I am X.'
+    example3: str = 'Learn my face/name, I am X.'
+    example4: str = 'Forget my face. Forget me.'
 
-    matches: List[str] = [desc, example1, example2]
+    matches: List[str] = [desc, example1, example2, example3, example4]
     _, score = api.categorize(message, matches)
     if (DEBUG): print(f"Facial Recognition: {score}")
     return score
@@ -26,15 +27,17 @@ def recognize(api: OpenAPI, message: str) -> float:
 subtask1: str = 'Recognize a singular face or person.'
 subtask2: str = 'Look around and recognize every face or person.'
 subtask3: str = 'Learn/remember a face, person, or name.'
+subtask4: str = 'Forget the faces in front of you'
 
 
 def handler(api: OpenAPI, message: str, client: Any) -> None:
-    subtasks: List[str] = [subtask1, subtask2, subtask3]
+    subtasks: List[str] = [subtask1, subtask2, subtask3, subtask4]
     label, _ = api.categorize(message, subtasks)
 
     if label == subtask1: return subtask1_handler(api, message, client)
     if label == subtask2: return subtask2_handler(api, message, client)
     if label == subtask3: return subtask3_handler(api, message, client)
+    if label == subtask4: return subtask4_handler(api, message, client)
     return config_handler(api, message)
 
 
@@ -101,3 +104,17 @@ def subtask3_handler(api: OpenAPI, message: str, client: Any) -> None:
         response = client.communicate('get', 'facial_put: null')
 
     print(f"I have learned the face of {name}.")
+
+def subtask4_handler(api: OpenAPI, message: str, client: Any) -> None:
+    if client is None:
+        print(f'Attempted "{subtask4}" without a client')
+        return
+    
+    _ = client.communicate('put', f'facial_get: forget')
+    response = client.communicate('get', 'facial_put: null')
+
+    while (response.data == 'null'):
+        time.sleep(1)
+        response = client.communicate('get', 'facial_put: null')
+    
+    print("Faces forgotten")
